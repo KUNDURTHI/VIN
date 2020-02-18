@@ -1,19 +1,22 @@
 package com.example.springjpadatademo.dao;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 
-@XmlRootElement(name="Results")
+@XmlRootElement(name="VinElements")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class VinElements {
+    @XmlElement(name="VariableId")
     private String variableId;
+    @XmlElement(name="Variable")
     private String variable;
+    @XmlElement(name="ValueId")
     private String valueID;
 
-    @XmlElement(name="VariableId")
+
     public String getVariableId() {
         return variableId;
     }
+
     public void setVariableId(String variableId) {
         this.variableId = variableId;
     }

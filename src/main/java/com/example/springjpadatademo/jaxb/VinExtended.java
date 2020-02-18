@@ -1,5 +1,6 @@
 package com.example.springjpadatademo.jaxb;
 
+import com.example.springjpadatademo.dao.Response;
 import com.example.springjpadatademo.dao.VINExtended;
 import com.example.springjpadatademo.dao.VinElements;
 import com.example.springjpadatademo.domain.ServiceUtilities;
@@ -20,6 +21,7 @@ import java.util.logging.Logger;
 public class VinExtended implements VINExtended {
     private static final Logger log = Logger.getLogger(String.valueOf(ServiceUtilities.class));
     private String url1;
+
     protected String responsexml;
     protected String jaxbCtxpath;
     protected String serviceNamae;
@@ -31,21 +33,26 @@ public class VinExtended implements VINExtended {
         this.url1 = url1;
     }
 
+    public void setUrl1(String url1) {
+        this.url1 = url1;
+    }
+
     @Override
     public Object getVinResponse() throws Exception {
         List<VinElements> vinElements=null;
-        if(url1 != null || url1 == ""){
+        log.info("log" + url1);
+        if(url1 == null || url1 == ""){
             throw new Exception("URL is empty");
         }
         try{
-            JAXBContext jaxbContext = JAXBContext.newInstance(VinElements.class);
+            JAXBContext jaxbContext = JAXBContext.newInstance(Response.class);
             Unmarshaller jaxbUnmarsheller = jaxbContext.createUnmarshaller();
             URL baseUrl=new URL(url1);
+
             URL pathUrl=new URL(baseUrl,"JH4TB2H26CC000000");
-            HttpURLConnection httpConnection = (HttpURLConnection)pathUrl.openConnection();
-            httpConnection.setRequestMethod("Get");
-            ResponseEntity<VinElements> response = (ResponseEntity<VinElements>) jaxbUnmarsheller.unmarshal(pathUrl);
-            log.info("Getting JAXB::" + response);
+            log.info("log" + pathUrl.toString());
+            Response response = (Response) jaxbUnmarsheller.unmarshal(pathUrl);
+            log.info("Getting JAXB::" + response.getMessage());
         }catch(Exception e){
             e.printStackTrace();
             log.info("Exception Occured while Unmarshelling the file::" + e);

@@ -1,24 +1,26 @@
 package com.example.springjpadatademo.dao;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
+
 @XmlRootElement(name="Response")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Response {
     private String response;
-    @XmlAttribute(name="Count")
+    @XmlElement(name="Count")
     private String count;
 
-    @XmlAttribute(name="Message")
+    @XmlElement(name="Message")
     private String message;
 
-    @XmlAttribute(name="SearchCriteria")
+    @XmlElement(name="SearchCriteria")
     private String searchCriteria;
 
     @XmlElement(name="Results")
     private Results results;
 
+    public Response(){
 
+    }
     public Response(String response, String response1) {
         this.response = response1;
 
