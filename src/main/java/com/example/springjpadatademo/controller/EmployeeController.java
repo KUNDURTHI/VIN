@@ -13,8 +13,9 @@ public class EmployeeController {
 
    @Autowired
     private TestRepository testRepository;
-
+    @Autowired
    private VINExtended vinExtended;
+
     @GetMapping("/saveEmployee")
     public @ResponseBody String save(){
         Test test1 = new Test();
@@ -45,12 +46,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/getVin")
-    public String GetVinXml() {
-        String vin = "JH4TB2H26CC000000";
-        if (vin != null) {
-            return vinExtended.getVinResponse(vin);
-        } else {
-            return null;
-        }
+    public Object GetVinXml() throws Exception {
+            return vinExtended.getVinResponse();
     }
 }

@@ -1,60 +1,65 @@
 package com.example.springjpadatademo.jaxb;
 
+import com.example.springjpadatademo.dao.VINExtended;
+import com.example.springjpadatademo.dao.VinElements;
 import com.example.springjpadatademo.domain.ServiceUtilities;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
-import java.io.StringWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.List;
 import java.util.logging.Logger;
 @Service
-@ConfigurationProperties(prefix = "sprin.datasource.url1")
-@Configuration("url")
-public class VinExtended {
+@ConfigurationProperties("spring.datasource")
+public class VinExtended implements VINExtended {
     private static final Logger log = Logger.getLogger(String.valueOf(ServiceUtilities.class));
-protected String responsexml;
-protected int timeout;
-protected String jaxbCtxpath;
-protected String serviceNamae;
+    private String url1;
+    protected String responsexml;
+    protected String jaxbCtxpath;
+    protected String serviceNamae;
 
-    public String getJaxbCtxpath() {
-        return jaxbCtxpath;
-    }
-    public void setJaxbCtxpath(String jaxbCtxpath) {
-        this.jaxbCtxpath = jaxbCtxpath;
+    public VinExtended() {
     }
 
-    public Object getXmlResponse(Object request) throws Exception {
-if (request == null){
- throw new Exception("XML request can not subjected to empty");
-}
-String url = getJaxbCtxpath();
-Object response = null;
-
-String requestXML = null;
-StringWriter sw = new StringWriter();
-    try{
-        JAXBContext jaxbContext = ServiceUtilities.getJAXBContext(url);
-        Unmarshaller jaxbUnmarsheller = jaxbContext.createUnmarshaller();
-        log.info("Getting JAXB::" + jaxbCtxpath);
-    }catch(Exception e){
-        e.printStackTrace();
-        log.info("Exception Occured while Unmarshelling the file::" + e);
+    public VinExtended(String url1) {
+        this.url1 = url1;
     }
-    return request;
-}
 
-public String getVinResponse(Object request){
-    String response = null;
-    try {
-        response = new ObjectMapper().writeValueAsString(request);
-    } catch (JsonProcessingException e) {
-        e.printStackTrace();
+    @Override
+    public Object getVinResponse() throws Exception {
+        List<VinElements> vinElements=null;
+        if(url1 != null || url1 == ""){
+            throw new Exception("URL is empty");
+        }
+        try{
+            JAXBContext jaxbContext = JAXBContext.newInstance(VinElements.class);
+            Unmarshaller jaxbUnmarsheller = jaxbContext.createUnmarshaller();
+            URL baseUrl=new URL(url1);
+            URL pathUrl=new URL(baseUrl,"JH4TB2H26CC000000");
+            HttpURLConnection httpConnection = (HttpURLConnection)pathUrl.openConnection();
+            httpConnection.setRequestMethod("Get");
+            ResponseEntity<VinElements> response = (ResponseEntity<VinElements>) jaxbUnmarsheller.unmarshal(pathUrl);
+            log.info("Getting JAXB::" + response);
+        }catch(Exception e){
+            e.printStackTrace();
+            log.info("Exception Occured while Unmarshelling the file::" + e);
+        }
+        return vinElements;
     }
-    return response;
-}
+
+    public String getVinResponse(Object request){
+        String response = null;
+        try {
+            response = new ObjectMapper().writeValueAsString(request);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return response;
+    }
 }

@@ -1,5 +1,5 @@
 package com.example.springjpadatademo.dao;
 
 public interface VINExtended {
-String getVinResponse(String request);
+    public Object getVinResponse() throws Exception;
 }
