@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -28,7 +29,6 @@ public class VinExtended implements VINExtended {
 
     public VinExtended() {
     }
-
     public VinExtended(String url1) {
         this.url1 = url1;
     }
@@ -41,7 +41,7 @@ public class VinExtended implements VINExtended {
     public Object getVinResponse() throws Exception {
         List<VinElements> vinElements=null;
         log.info("log" + url1);
-        if(url1 == null || url1 == ""){
+        if(StringUtils.isEmpty(url1)){
             throw new Exception("URL is empty");
         }
         try{

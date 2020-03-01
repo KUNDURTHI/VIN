@@ -29,7 +29,7 @@ public class EmployeeController {
     public @ResponseBody String createEmployee(@RequestBody Test test){
         Test test1 = new Test();
         test1.setName("abc");
-
+String s;
         return "Employee Details Saved Successfully";
     }
 
@@ -46,7 +46,8 @@ public class EmployeeController {
     }
 
     @GetMapping("/getVin")
-    public Object GetVinXml() throws Exception {
+  @ResponseBody  public Object GetVinXml() throws Exception {
             return vinExtended.getVinResponse();
     }
+
 }
