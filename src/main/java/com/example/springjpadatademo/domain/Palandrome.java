@@ -8,7 +8,6 @@ public class Palandrome {
             i--;
             System.out.print(c1);
             Palandrome(ch, i);
-
         }
     }
     public static void main(String[] args){
